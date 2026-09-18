@@ -1,0 +1,17 @@
+{
+  "id": "youngagent.project",
+  "version": "3.0.0",
+  "name": "工程项目智能体",
+  "category": "project",
+  "description": "工程项目计划、MPP/Gantt、进度、风险和文档分析。",
+  "publisher": "YoungAgent",
+  "license": "Apache-2.0",
+  "skills": [
+    "project-management"
+  ],
+  "tools": [],
+  "permissions": [
+    "knowledge.read"
+  ],
+  "entrypoint": "agent"
+}

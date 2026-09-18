@@ -1,0 +1,17 @@
+{
+  "id": "youngagent.bim",
+  "version": "3.0.0",
+  "name": "BIM 智能体",
+  "category": "bim",
+  "description": "BIM 模型、构件、工程量和设计审查辅助。",
+  "publisher": "YoungAgent",
+  "license": "Apache-2.0",
+  "skills": [
+    "bim"
+  ],
+  "tools": [],
+  "permissions": [
+    "knowledge.read"
+  ],
+  "entrypoint": "agent"
+}

@@ -1,0 +1,60 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment: {POSTGRES_DB: agent, POSTGRES_USER: agent, POSTGRES_PASSWORD: agent}
+    ports: ["5432:5432"]
+    volumes: [agent_pg:/var/lib/postgresql/data]
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+  domain-mcp:
+    build: ../services/domain-mcp
+    ports: ["8110:8110"]
+  mcp-gateway:
+    build: ../services/mcp-gateway
+    ports: ["8100:8100"]
+  browser:
+    build: ../services/browser
+    ports: ["8090:8090"]
+  computer-use:
+    build: ../services/computer-use
+    ports: ["8091:8091"]
+  agent-api:
+    build: ../services/agent
+    environment:
+      MODEL_PROVIDER: ${MODEL_PROVIDER:-openai}
+      MODEL_NAME: ${MODEL_NAME:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://agent:agent@postgres:5432/agent}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      MCP_GATEWAY_URL: ${MCP_GATEWAY_URL:-http://mcp-gateway:8100}
+      DOMAIN_MCP_URL: ${DOMAIN_MCP_URL:-http://domain-mcp:8110}
+      BROWSER_SERVICE_URL: ${BROWSER_SERVICE_URL:-http://browser:8090}
+      COMPUTER_USE_URL: ${COMPUTER_USE_URL:-http://computer-use:8091}
+    ports: ["8000:8000"]
+    depends_on: [postgres,redis,domain-mcp,mcp-gateway,browser,computer-use]
+  agent-worker:
+    build:
+      context: ../services/agent
+      dockerfile: worker.Dockerfile
+    environment:
+      MODEL_PROVIDER: ${MODEL_PROVIDER:-openai}
+      MODEL_NAME: ${MODEL_NAME:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL:-https://api.openai.com/v1}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://agent:agent@postgres:5432/agent}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      MCP_GATEWAY_URL: ${MCP_GATEWAY_URL:-http://mcp-gateway:8100}
+      DOMAIN_MCP_URL: ${DOMAIN_MCP_URL:-http://domain-mcp:8110}
+      BROWSER_SERVICE_URL: ${BROWSER_SERVICE_URL:-http://browser:8090}
+      COMPUTER_USE_URL: ${COMPUTER_USE_URL:-http://computer-use:8091}
+    depends_on: [postgres,redis,domain-mcp,mcp-gateway,browser,computer-use]
+  web:
+    image: node:22-alpine
+    working_dir: /app
+    volumes: [../apps/web:/app]
+    command: sh -c "npm install && npm run dev -- --host 0.0.0.0"
+    ports: ["5173:5173"]
+    depends_on: [agent-api]
+volumes: {agent_pg: {}}

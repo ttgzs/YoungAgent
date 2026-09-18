@@ -1,0 +1,17 @@
+{
+  "id": "youngagent.iot",
+  "version": "3.0.0",
+  "name": "IoT/SCADA 智能体",
+  "category": "iot",
+  "description": "MQTT、设备点位、告警、时序数据和自控运维辅助。",
+  "publisher": "YoungAgent",
+  "license": "Apache-2.0",
+  "skills": [
+    "iot"
+  ],
+  "tools": [],
+  "permissions": [
+    "knowledge.read"
+  ],
+  "entrypoint": "agent"
+}

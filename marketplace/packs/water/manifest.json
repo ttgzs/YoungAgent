@@ -1,0 +1,17 @@
+{
+  "id": "youngagent.water",
+  "version": "3.0.0",
+  "name": "水务智能体",
+  "category": "water",
+  "description": "污水厂运行、水质、曝气优化和 SCADA 数据分析辅助。",
+  "publisher": "YoungAgent",
+  "license": "Apache-2.0",
+  "skills": [
+    "water"
+  ],
+  "tools": [],
+  "permissions": [
+    "knowledge.read"
+  ],
+  "entrypoint": "agent"
+}
